@@ -1,0 +1,24 @@
+@prefix ex: <http://example.org/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+<TestShape> a sh:NodeShape ;
+    sh:name "Test Shape" ;
+    sh:description "Shape for testing test data when testing the testing program" ;
+    sh:targetClass ex:Test ;
+    sh:property [
+        sh:path ex:name ;
+        sh:nodeKind sh:Literal ;
+        sh:datatype rdf:langString ;
+        sh:minCount 1 ;
+    ] , [
+        sh:path ex:description ;
+        sh:nodeKind sh:Literal ;
+        sh:datatype rdf:langString ;
+        sh:minCount 1 ;
+    ], [
+        sh:path ex:author ;
+        sh:nodeKind sh:IRI ;
+        sh:minCount 1 ;
+    ] ;
+.

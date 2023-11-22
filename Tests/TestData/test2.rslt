@@ -1,0 +1,23 @@
+Validation Report
+Conforms: False
+Results (3):
+Constraint Violation in DatatypeConstraintComponent (http://www.w3.org/ns/shacl#DatatypeConstraintComponent):
+	Severity: sh:Violation
+	Source Shape: [ sh:datatype rdf:langString ; sh:minCount Literal("1", datatype=xsd:integer) ; sh:nodeKind sh:Literal ; sh:path ex:name ]
+	Focus Node: :test2
+	Value Node: Literal("A test")
+	Result Path: ex:name
+	Message: Value is not Literal with datatype rdf:langString
+Constraint Violation in MinCountConstraintComponent (http://www.w3.org/ns/shacl#MinCountConstraintComponent):
+	Severity: sh:Violation
+	Source Shape: [ sh:datatype rdf:langString ; sh:minCount Literal("1", datatype=xsd:integer) ; sh:nodeKind sh:Literal ; sh:path ex:description ]
+	Focus Node: :test2
+	Result Path: ex:description
+	Message: Less than 1 values on :test2->ex:description
+Constraint Violation in NodeKindConstraintComponent (http://www.w3.org/ns/shacl#NodeKindConstraintComponent):
+	Severity: sh:Violation
+	Source Shape: [ sh:minCount Literal("1", datatype=xsd:integer) ; sh:nodeKind sh:IRI ; sh:path ex:author ]
+	Focus Node: :test2
+	Value Node: Literal("Phil")
+	Result Path: ex:author
+	Message: Value is not of Node Kind sh:IRI

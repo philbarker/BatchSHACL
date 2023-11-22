@@ -1,0 +1,6 @@
+@prefix : <http://example.org/> .
+
+:test1 a :Test ;
+    :name "A test"@en ;
+    :description "This test validates."@en ;
+    :author <https://people.pjjk.net/phil> .
