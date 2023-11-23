@@ -3,4 +3,5 @@
 :test2 a :Test ;
     :name "A test" ;  # not a langstring
     # no description
-    :author "Phil" . # not an IRI
+    :author "Phil" ; # not an IRI
+    :format :eBook .

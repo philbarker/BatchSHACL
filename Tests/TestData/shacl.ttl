@@ -22,3 +22,10 @@
         sh:minCount 1 ;
     ] ;
 .
+
+<Test2Shape> a sh:NodeShape ;
+    sh:name "Test2 Shape" ;
+    sh:description "Shape for testing list values of properties." ;
+    sh:targetObjectsOf ex:format;
+    sh:in (ex:Hardback ex:eBook ex:Audiobook ex:Paperback) ;
+.

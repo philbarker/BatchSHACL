@@ -50,12 +50,24 @@ class BatchValidate:
         if not expected_results:
             print("No expected result file found for " + data_file_name + ".")
             print("pyshacl results are:")
-            print(results_text)
+            print(results_text, "\n")
             return (0, "No expected result file found for comparison.")
         else:
             for result_line in results_text.split("\n"):
-                if result_line in expected_results:
-                    pass
+                if "not in list [" in result_line:
+                    # because the members of RDF list may be in any order.
+                    (match, msg) = self._check_list_match(result_line, expected_results)
+                    if not match:
+                        print(
+                            "Info: found ",
+                            result_line,
+                            "in pyshacl results but not in expected results.",
+                        )
+                        return (1, "Results are not as expected.")
+                    else:
+                        continue
+                elif result_line in expected_results:
+                    continue
                 else:
                     print(
                         "Info: found ",
@@ -85,3 +97,17 @@ class BatchValidate:
             print("No results file found called " + file_name + ".")
             results = False
         return results
+
+    def _check_list_match(self, result_line, expected_results):
+        (result_line_start, result_line_rest) = result_line.split("[")
+        # removing closing ']' & make a python list
+        result_line_list = result_line_rest.replace("]", "").split(", ")
+        for res in result_line_list:
+            if res not in expected_results:
+                return False, res
+            else:
+                pass
+        if result_line_start not in expected_results:
+            return False, result_line_start
+        else:
+            return (True, "Passed list match check.")

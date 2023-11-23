@@ -6,10 +6,10 @@ from argparse import ArgumentParser
 def getFileNames(p, ext):
     """Return a list of file names from the data directory at path p with extension ext."""
     file_list = []  # list of files to return
-    if p[-1] == '/':
+    if p[-1] == "/":
         pass
     else:
-        p = p + '/' 
+        p = p + "/"
     if isdir(p):
         for filename in iglob(p + "*." + ext):
             file_list.append(filename)

@@ -7,13 +7,13 @@ data_file_list = [
     "Tests/TestData/test1.ttl",
     "Tests/TestData/test2.ttl",
     "Tests/TestData/test3.ttl",
+    "Tests/TestData/test4.ttl",
 ]
-expected_results = """Validation Report
-Conforms: True"""
 expected_vals = [
     (0, "Results are as expected."),
     (0, "Results are as expected."),
     (1, "Results are not as expected."),
+    (0, "Results are as expected."),
 ]
 
 
@@ -32,6 +32,8 @@ def test_init():
 def test_read_result_file():
     bv = BatchValidate(data_file_list, shacl_file_name)
     results = bv._read_result_file("Tests/TestData/test1.rslt")
+    expected_results = """Validation Report
+Conforms: True"""
     assert results == expected_results
     results = bv._read_result_file("not_there")
     assert results == False
@@ -48,6 +50,27 @@ def test_compareResults():
     assert c == (0, "No expected result file found for comparison.")
     c = bv._compareResults("same", "different", "test.ttl")
     assert c == (1, "Results are not as expected.")
+
+
+def test_check_list_match():
+    bv = BatchValidate(data_file_list, shacl_file_name)
+    result_line = "Message: Value ceds:GlobalStudentID not in list ['ceds:CanadianSINIdentification', 'ceds:SchoolIdentification', 'ceds:PersonIdentifier', 'ceds:StateIdentification', 'ceds:OtherIdentification', 'ceds:SocialSecurityNumberIdentification', 'ceds:PersonalIdentification']"
+    expected_results = """	Severity: sh:Violation
+	Source Shape: ex:personidentificationshapeType
+	Focus Node: [ ceds:StudentIdentifier Literal("123456789", datatype=xsd:token) ; rdf:type ceds:GlobalStudentID ]
+	Value Node: ceds:GlobalStudentID
+	Result Path: rdf:type
+	Message: Value ceds:GlobalStudentID not in list ['ceds:CanadianSINIdentification', 'ceds:SchoolIdentification', 'ceds:PersonIdentifier', 'ceds:StateIdentification', 'ceds:OtherIdentification', 'ceds:PersonalIdentification']"""
+    r = bv._check_list_match(result_line, expected_results)
+    assert r == (False, "'ceds:SocialSecurityNumberIdentification'")
+    expected_results = """	Severity: sh:Violation
+	Source Shape: ex:personidentificationshapeType
+	Focus Node: [ ceds:StudentIdentifier Literal("123456789", datatype=xsd:token) ; rdf:type ceds:GlobalStudentID ]
+	Value Node: ceds:GlobalStudentID
+	Result Path: rdf:type
+	Message: Value ceds:GlobalStudentID not in list ['ceds:CanadianSINIdentification', 'ceds:SocialSecurityNumberIdentification', 'ceds:SchoolIdentification', 'ceds:PersonIdentifier', 'ceds:StateIdentification', 'ceds:OtherIdentification', 'ceds:PersonalIdentification']"""
+    r = bv._check_list_match(result_line, expected_results)
+    assert r == (True, "Passed list match check.")
 
 
 def test_runValidations():
