@@ -4,7 +4,7 @@ Alpha version, please use with care, in a virtual environment, and report bugs.
 
 ## Usage
 ```
-$batchshacl.py [-h] [-e <data file .ext>] [-r <results file .ext>] [<path/to/shacl/file>] [<path/to/data/files/>]
+$ batchshacl.py [-h] [-e <data file .ext>] [-r <results file .ext>] [<path/to/shacl/file>] [<path/to/data/files/>]
 ```
 
 Checks that the results of shacl validation for files in a specified folder are as expected.

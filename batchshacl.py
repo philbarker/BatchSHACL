@@ -3,22 +3,27 @@ from BatchSHACL import BatchValidate, parse_arguments, getFileNames
 
 if __name__ == "__main__":
     args = parse_arguments()
-    print(args)
     folder_name = args.folder_name
     shacl_file_name = args.shacl_file_name
     data_ext = args.data_ext
     results_ext = args.results_ext
     print(
-        "Checking validation of files with extension",
+        "\nChecking validation of files \n\twith extension",
         data_ext,
-        "in folder",
+        "\n\tin folder",
         folder_name,
-        "using shacl file",
+        "\n\tusing shacl file",
         shacl_file_name,
-        "against results stored in ",
+        "\n\tagainst results stored in .",
         results_ext,
-        "files.",
+        "files.\n",
     )
     file_list = getFileNames(folder_name, data_ext)
     bv = BatchValidate(file_list, shacl_file_name)
-    bv.runValidations()
+    diffs = bv.runValidations()
+    for file in diffs.keys():
+        (code, msg) = diffs[file]
+        if code == 0 : #todo: colour code results
+            print(file, msg)
+        else :
+            print(file, msg)

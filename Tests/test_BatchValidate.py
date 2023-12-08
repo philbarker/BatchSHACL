@@ -9,12 +9,12 @@ data_file_list = [
     "Tests/TestData/test3.ttl",
     "Tests/TestData/test4.ttl",
 ]
-expected_vals = [
-    (0, "Results are as expected."),
-    (0, "Results are as expected."),
-    (1, "Results are not as expected."),
-    (0, "Results are as expected."),
-]
+expected_vals = {
+    "Tests/TestData/test1.ttl": (0, "Results are as expected."),
+    "Tests/TestData/test2.ttl": (0, "Results are as expected."),
+    "Tests/TestData/test3.ttl": (1, "Results are not as expected.\n\tFound Conforms: False in pyshacl results but not in expected results."),
+    "Tests/TestData/test4.ttl": (0, "Results are as expected."),
+}
 
 
 def test_init():
@@ -49,7 +49,7 @@ def test_compareResults():
     c = bv._compareResults("same", False, "test.ttl")
     assert c == (0, "No expected result file found for comparison.")
     c = bv._compareResults("same", "different", "test.ttl")
-    assert c == (1, "Results are not as expected.")
+    assert c == (1, "Results are not as expected.\n\tFound same in pyshacl results but not in expected results.")
 
 
 def test_check_list_match():

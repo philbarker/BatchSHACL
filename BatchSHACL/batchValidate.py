@@ -30,9 +30,9 @@ class BatchValidate:
 
     def runValidations(self):
         data_file_list = self.data_file_list
-        diff_list = []
+        diff_list = dict()
         for data_file_name in data_file_list:
-            print("Checking", data_file_name)
+#            print("Checking", data_file_name)
             stem = splitext(data_file_name)[0]
             result_file_name = stem + result_ext
             (conforms, results_graph, results_text) = self._validateFile(
@@ -41,16 +41,13 @@ class BatchValidate:
             #           print(conforms, results_graph, results_text)
             expected_results = self._read_result_file(result_file_name)
             diff = self._compareResults(results_text, expected_results, data_file_name)
-            diff_list.append(diff)
+            diff_list[data_file_name] = diff
         return diff_list
 
     def _compareResults(self, results_text, expected_results, data_file_name):
         #        print("results:\n", results_text)
         #        print("expected results:\n", expected_results)
         if not expected_results:
-            print("No expected result file found for " + data_file_name + ".")
-            print("pyshacl results are:")
-            print(results_text, "\n")
             return (0, "No expected result file found for comparison.")
         else:
             for result_line in results_text.split("\n"):
@@ -58,25 +55,23 @@ class BatchValidate:
                     # because the members of RDF list may be in any order.
                     (match, msg) = self._check_list_match(result_line, expected_results)
                     if not match:
-                        print(
-                            "Info: found ",
-                            result_line,
-                            "in pyshacl results but not in expected results.",
+                        msg = (
+                            "Results are not as expected.\n\tFound "
+                            + result_line
+                            + " in pyshacl results but not in expected results."
                         )
-                        return (1, "Results are not as expected.")
+                        return (1, msg)
                     else:
                         continue
                 elif result_line in expected_results:
                     continue
                 else:
-                    print(
-                        "Info: found ",
-                        result_line,
-                        "in pyshacl results but not in expected results.",
+                    msg = (
+                        "Results are not as expected.\n\tFound "
+                        + result_line
+                        + " in pyshacl results but not in expected results."
                     )
-                    print("Results for " + data_file_name + " are as not as expected.")
-                    return (1, "Results are not as expected.")
-            print("Results for " + data_file_name + " are as expected.")
+                    return (1, msg)
             return (0, "Results are as expected.")
 
     def _validateFile(self, data_file_name, result_file_name):
