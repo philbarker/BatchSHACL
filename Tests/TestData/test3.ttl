@@ -1,7 +1,0 @@
-@prefix : <http://example.org/> .
-
-:test3 a :Test ;
-    :name "A test" ;  # not a langstring
-    # no description
-    :format :eBook ;
-    :author "Phil" . # not an IRI
